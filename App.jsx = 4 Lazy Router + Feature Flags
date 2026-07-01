@@ -1,0 +1,62 @@
+import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from './firebase';
+
+const M1 = lazy(() => import('./modules/01_AppHub.jsx'));
+const M2 = lazy(() => import('./modules/02_Pos.jsx'));
+const M3 = lazy(() => import('./modules/03_Stock.jsx'));
+const M4 = lazy(() => import('./modules/04_Marketplace.jsx'));
+const M5 = lazy(() => import('./modules/05_QuoteBot.jsx'));
+const M6 = lazy(() => import('./modules/06_Storefront.jsx'));
+const M7 = lazy(() => import('./modules/07_GroupBuy.jsx'));
+const M8 = lazy(() => import('./modules/08_BulkOrder.jsx'));
+const M9 = lazy(() => import('./modules/09_Wallet.jsx'));
+const M10 = lazy(() => import('./modules/10_Stokvel.jsx'));
+const M11 = lazy(() => import('./modules/11_Vending.jsx'));
+const M12 = lazy(() => import('./modules/12_Loans.jsx'));
+const M13 = lazy(() => import('./modules/13_Insurance.jsx'));
+const M14 = lazy(() => import('./modules/14_Invest.jsx'));
+const M15 = lazy(() => import('./modules/15_Payroll.jsx'));
+const M16 = lazy(() => import('./modules/16_SARS.jsx'));
+const M17 = lazy(() => import('./modules/17_Riders.jsx'));
+const M18 = lazy(() => import('./modules/18_Fleet.jsx'));
+const M19 = lazy(() => import('./modules/19_POD.jsx'));
+const M20 = lazy(() => import('./modules/20_IOT.jsx'));
+const M21 = lazy(() => import('./modules/21_Border.jsx'));
+const M22 = lazy(() => import('./modules/22_Warehouse.jsx'));
+const M23 = lazy(() => import('./modules/23_Loads.jsx'));
+const M24 = lazy(() => import('./modules/24_RouteAI.jsx'));
+const M25 = lazy(() => import('./modules/25_Credit.jsx'));
+const M26 = lazy(() => import('./modules/26_CCTV.jsx'));
+const M27 = lazy(() => import('./modules/27_SOS.jsx'));
+const M28 = lazy(() => import('./modules/28_LostFound.jsx'));
+const M29 = lazy(() => import('./modules/29_Jobs.jsx'));
+const M30 = lazy(() => import('./modules/30_SETA.jsx'));
+const M31 = lazy(() => import('./modules/31_Tenders.jsx'));
+const M32 = lazy(() => import('./modules/32_BEE.jsx'));
+const M33 = lazy(() => import('./modules/33_Loadshed.jsx'));
+const M34 = lazy(() => import('./modules/34_Solar.jsx'));
+const M35 = lazy(() => import('./modules/35_Fridge.jsx'));
+const M36 = lazy(() => import('./modules/36_Fuel.jsx'));
+const M37 = lazy(() => import('./modules/37_Analytics.jsx'));
+const M38 = lazy(() => import('./modules/38_AIBoss.jsx'));
+const M39 = lazy(() => import('./modules/39_Channels.jsx'));
+const M40 = lazy(() => import('./modules/40_Offline.jsx'));
+const M41 = lazy(() => import('./modules/41_Franchise.jsx'));
+const M42 = lazy(() => import('./modules/42_WhiteLabel.jsx'));
+const M43 = lazy(() => import('./modules/43_StockEx.jsx'));
+const M44 = lazy(() => import('./modules/44_Agents.jsx'));
+const M45 = lazy(() => import('./modules/45_Dispute.jsx'));
+const M46 = lazy(() => import('./modules/46_KYC.jsx'));
+const M47 = lazy(() => import('./modules/47_Donate.jsx'));
+const M48 = lazy(() => import('./modules/48_Gov.jsx'));
+
+const MAP = {module_1:M1,module_2:M2,module_3:M3,module_4:M4,module_5:M5,module_6:M6,module_7:M7,module_8:M8,module_9:M9,module_10:M10,module_11:M11,module_12:M12,module_13:M13,module_14:M14,module_15:M15,module_16:M16,module_17:M17,module_18:M18,module_19:M19,module_20:M20,module_21:M21,module_22:M22,module_23:M23,module_24:M24,module_25:M25,module_26:M26,module_27:M27,module_28:M28,module_29:M29,module_30:M30,module_31:M31,module_32:M32,module_33:M33,module_34:M34,module_35:M35,module_36:M36,module_37:M37,module_38:M38,module_39:M39,module_40:M40,module_41:M41,module_42:M42,module_43:M43,module_44:M44,module_45:M45,module_46:M46,module_47:M47,module_48:M48};
+
+export default function App(){
+  const [mods,setMods]=useState({}); const [load,setLoad]=useState(true);
+  useEffect(()=>onAuthStateChanged(auth,async u=>{if(u){const s=await getDoc(doc(db,'feature_flags',u.tenantId||'tenantId_demo'));setMods(s.data()||{})}setLoad(false)}),[]);
+  if(load)return <div>Loading Empire...</div>;
+  return <Suspense fallback={<div>Loading...</div>}><div style={{padding:12,background:'#0F172A',color:'#fff',minHeight:'100vh'}}><h1>Empire OS</h1>{Object.keys(MAP).map(k=>mods[k]?React.createElement(MAP[k],{key:k}):null)}</div></Suspense>;
+}
